@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>VAPI</title>
+  <meta charset="UTF-8">
+
+  <!-- bootstrap link -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <style>
+    .vapi-btn {
+      position: fixed;
+      top: 83%;
+      background-color: #dd00ff;
+    }
+  </style>
+</head>
+
+<body style="justify-content: center; align-items: center; display: flex;">
+
+  <div>
+    <h1 style="font-size: 30px;">Beberapa Tips untuk berbicara dengan asisten AI kami</h1>
+    <ul>
+      <li>
+        <h2 style="font-size:15px; font-weight: bold;">1.Mengubah Bahasa AI ke indonesia:</h2>
+        <h3 style="font-size:13px ;">Ucapkan "Bisakah Kamu Berbicara bahasa indonesia"</h3>
+      </li>
+      <li>
+        <h2 style="font-size:15px; font-weight: bold;">2.Tanya apapun yang kamu inginkan</h2>
+        <h3 style="font-size:13px ;">misal <br>
+          1. "ava!! Beritahu Kepadaku apa yang dimaksud dengan web 3" <br>
+          2."Apa keunggulan dari web 3 ?" <br>
+          3."Apa saja contoh teknologi web 3 yang sudah ada sekarang? "
+        </h3>
+      </li>
+      <li>
+        <h2 style="font-size:15px; font-weight: bold;">for More Information:</h2>
+        <h3 style="font-size:12px ;">Ai kami masih dibatasi untuk penggunaannya, jika suatu saat anda tidak bisa lagi
+          menggunakannya, silakan
+          hubungi developer kami!!</h3>
+        <span style="font-size: 10px; font-weight: bolder; margin-top: 40px;">
+          creation with vapi.ai x arroofi enterprise
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card text-center text-bg-dark shadow-lg border-2 p-3 mb-3 position-fixed bottom-0 "
+    style="width: 10rem; border: 1px solid #dd00ff; ">
+    <div class="card-body">
+      <p id="icon"></p>
+    </div>
+  </div>
+
+
+  <script>
+    const assistant = "0df3cc54-4c60-4390-8974-01341d0596b3"; // Replace with your assistant ID
+    const apiKey = "5c81e316-e8f8-492e-ac7f-227d0e186d4f"; // Replace with your API key
+
+    var vapiInstance = null;
+
+    const assistantOverrides = {
+      "firstMessage": "Hello, this is ava, I was created by Nabhan Arofi arpansi to help with your problem, can i help you?"
+    };
+
+    (function (d, t) {
+      var icon = document.getElementById('icon')
+      var g = document.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+      g.src =
+        "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.defer = true;
+      g.async = true;
+      s.parentNode.insertBefore(g, s);
+
+      g.onload = function () {
+        const vapi = window.vapiSDK.run({
+          apiKey: apiKey,
+          assistant: assistant,
+          assistantOverrides: assistantOverrides,
+        });
+
+        if (vapi) {
+          window.vapiSDK.vapi = vapi;
+          vapiInstance = vapi;
+
+          vapiInstance.on("speech-start", () => {
+            console.log("Speech has started");
+          });
+
+          vapiInstance.on("speech-end", () => {
+            console.log("Speech has ended");
+          });
+
+          vapiInstance.on("call-start", () => {
+            console.log("Call has started");
+            updateButtonState('active');
+          });
+
+          vapiInstance.on("call-end", () => {
+            console.log("Call has stopped");
+            updateButtonState('idle');
+          });
+
+          vapiInstance.on("volume-level", (volume) => {
+            console.log(`Assistant volume level: ${volume}`);
+          });
+
+          vapiInstance.on("message", (message) => {
+            console.log(message);
+          });
+
+          vapiInstance.on("error", (e) => {
+            console.error(e);
+            updateButtonState('idle');
+          });
+        }
+      };
+    })(document, "script");
+
+
+
+  </script>
+</body>
+
+</html>
